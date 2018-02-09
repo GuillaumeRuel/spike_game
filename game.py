@@ -138,9 +138,9 @@ class game:
             self.spike_arr.append([(w,b),(w - self.spike_height, b + self.spike_width/2),(w,b + self.spike_width)])
     
     def random_spike_color(self):
-        r = randint(1, 175)
-        g = randint(1, 175)
-        b = randint(1, 175)
+        r = randint(50, 175)
+        g = randint(50, 175)
+        b = randint(50, 175)
         self.spike_color = (r, g, b)
 
     def game_reset(self):

@@ -8,11 +8,9 @@ class player:
     name = ""
     width = 60
     height = 60
-    jump_speed = -1500
+    jump_speed = -2000
     gravity = 9800
-    
-    jump = False
-    in_action = False
+    is_alive = True
         
     def __init__(self, start_pos, velx, color, name):
 
@@ -27,7 +25,6 @@ class player:
     
     def jump(self):
         self.vely = self.jump_speed
-        self.in_action = True
 
     def update_y_velocity(self, t):
         self.vely = self.vely + self.gravity * t

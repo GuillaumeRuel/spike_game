@@ -13,9 +13,7 @@ class game:
     font = ""
     clock = 0
     done = False
-    player_is_dead = False
     screen = ""
-    pygame = ""
     t = 0.01
 
     spike_color = (125, 125, 125)
@@ -47,11 +45,11 @@ class game:
 
     def launch(self):
         while not self.done:
+            time.sleep(0.01)
             pressed = pygame.key.get_pressed()
             if pressed[pygame.K_x]:
                 self.game_reset()
 
-            time.sleep(self.t)
             self.screen.fill(self.background_color)
             self.draw_spikes()
             self.draw_level()
@@ -60,31 +58,25 @@ class game:
                 if event.type == self.pygame.QUIT:
                     self.done = True
 
-            pressed = pygame.key.get_pressed()
-            if pressed[pygame.K_UP]:
-                if not self.player1.in_action:
+                pressed = pygame.key.get_pressed()
+                if pressed[pygame.K_w]:
                     self.player1.jump()
-                else:
-                    self.player1.in_action = False
-            
-            if pressed[pygame.K_w]:
-                if not self.player2.in_action:
+
+                if pressed[pygame.K_UP]:
                     self.player2.jump()
-                else:
-                    self.player2.in_action = False
+
+            self.is_player_alive(self.player1)
+            self.is_player_alive(self.player2)
+
+            if self.player1.is_alive and self.player2.is_alive:
+                self.update_player(self.player1)
+                self.update_player(self.player2)
 
             #check if the player 1 touch the edge
             if self.player1.x < 0 or self.player1.x > self.screen_size[0] - self.player1.width:
                 d = threading.Thread(name='gen_spike', target=self.gen_spikes)
                 d.start()
                 self.level += 1
-
-            self.is_player_alive(self.player1)
-            self.is_player_alive(self.player2)
-
-            if not self.player_is_dead:
-                self.update_player(self.player1)
-                self.update_player(self.player2)
 
             self.pygame.draw.rect(self.screen, self.player1.color, self.pygame.Rect(self.player1.x, self.player1.y, self.player1.width, self.player1.height))
             self.pygame.draw.rect(self.screen, self.player2.color, self.pygame.Rect(self.player2.x, self.player2.y, self.player2.width, self.player2.height))
@@ -101,7 +93,7 @@ class game:
         level_txt = self.font.render(str(self.level), False, (0, 255, 0))
         self.screen.blit(level_txt, ((self.screen_size[0] / 2 ) - (level_txt.get_width()/2), 50))
     
-    def draw_end_game_msg(self):
+    def draw_end_game_msg(self, player):
         textsurface = self.font.render(player.name + ' lost!', False, (255, 0, 0))
         self.screen.blit(textsurface,((self.screen_size[0] / 2 ) - (textsurface.get_width()/2), (self.screen_size[1] / 2) - (textsurface.get_height()/2)))
 
@@ -146,9 +138,9 @@ class game:
     def game_reset(self):
         self.player1 = player.player((0,100), 5, (0,255,0), "Player 1")
         self.player2 = player.player((self.screen_size[0] - self.player1.width, 100), -5, (0,0,255), "Player 2")
-        self.player_is_dead = False
         self.level = 1
         self.spike_arr = []
+        self.static_spike_arr = []
         self.gen_static_spike()
 
     def is_player_alive(self, player):        
@@ -157,13 +149,13 @@ class game:
         for c in self.static_spike_arr:
             s = Polygon(c)
             if p.intersects(s):
-                self.player_is_dead = True
+                player.is_alive = False
         
         for c in self.spike_arr:
             s = Polygon(c)
             if p.intersects(s):
-                self.player_is_dead = True
+                player.is_alive = False
 
-        if self.player_is_dead:
-            self.draw_end_game_msg()
+        if not player.is_alive:
+            self.draw_end_game_msg(player)
                 

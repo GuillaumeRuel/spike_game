@@ -6,9 +6,13 @@ class player:
     vely = 0
     velx = 0
     name = ""
+    width = 60
+    height = 60
+    jump_speed = -1500
+    gravity = 9800
     
     jump = False
-    is_press = False
+    in_action = False
         
     def __init__(self, start_pos, velx, color, name):
 
@@ -17,3 +21,22 @@ class player:
         self.velx = velx
         self.color = color
         self.name = name
+    
+    def get_polygon(self):
+        return [(self.x, self.y),(self.x, self.y + self.width),(self.x + self.height, self.y + self.height),(self.x + self.width, self.y)]
+    
+    def jump(self):
+        self.vely = self.jump_speed
+        self.in_action = True
+
+    def update_y_velocity(self, t):
+        self.vely = self.vely + self.gravity * t
+    
+    def update_y_position(self, t):
+        self.y = self.y + self.vely * t
+    
+    def update_x_position(self, max_width):
+        if self.x < 0 or self.x > max_width - self.width:
+            self.velx *= -1
+
+        self.x += self.velx

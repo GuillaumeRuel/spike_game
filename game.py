@@ -17,8 +17,8 @@ class game:
     t = 0.01
 
     spike_color = (125, 125, 125)
-    spike_width = 100
-    spike_height = 50
+    spike_width = 0
+    spike_height = 0
 
     spike_arr = []
     static_spike_arr = []
@@ -28,14 +28,16 @@ class game:
     player2 = ""
     screen_size = (0, 0)
 
-    def __init__(self, pygame, screen):
-
-        self.pygame = pygame
+    def __init__(self, screen, width, height):
+        
         self.screen = screen
         self.start = time.time()
         self.font = pygame.font.SysFont('Comic Sans MS', 72)
         self.clock = pygame.time.Clock()
-        self.screen_size = pygame.display.get_surface().get_size()
+        self.screen_size = [width, height]#pygame.display.get_surface().get_size()
+
+        self.spike_width = self.screen_size[0] / 20
+        self.spike_height = self.screen_size[1] / 20
 
         self.player1 = player.player((0,150), 5, (0,255,0), "Player 1")
         self.player2 = player.player((self.screen_size[0] - self.player1.width, 150), -5, (0,0,255), "Player 2")
@@ -54,8 +56,8 @@ class game:
             self.draw_spikes()
             self.draw_level()
 
-            for event in self.pygame.event.get():
-                if event.type == self.pygame.QUIT:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
                     self.done = True
 
                 pressed = pygame.key.get_pressed()
@@ -64,6 +66,10 @@ class game:
 
                 if pressed[pygame.K_UP]:
                     self.player2.jump()
+                
+                if pressed[pygame.K_ESCAPE]:
+                    self.done = True
+                    continue
 
             self.is_player_alive(self.player1)
             self.is_player_alive(self.player2)
@@ -78,10 +84,10 @@ class game:
                 d.start()
                 self.level += 1
 
-            self.pygame.draw.rect(self.screen, self.player1.color, self.pygame.Rect(self.player1.x, self.player1.y, self.player1.width, self.player1.height))
-            self.pygame.draw.rect(self.screen, self.player2.color, self.pygame.Rect(self.player2.x, self.player2.y, self.player2.width, self.player2.height))
+            pygame.draw.rect(self.screen, self.player1.color, pygame.Rect(self.player1.x, self.player1.y, self.player1.width, self.player1.height))
+            pygame.draw.rect(self.screen, self.player2.color, pygame.Rect(self.player2.x, self.player2.y, self.player2.width, self.player2.height))
 
-            self.pygame.display.flip()
+            pygame.display.flip()
             self.clock.tick(60)
     
     def update_player(self, player):
@@ -99,9 +105,9 @@ class game:
 
     def draw_spikes(self):
         for c in self.spike_arr:
-            self.pygame.draw.polygon(self.screen, self.spike_color, [c[0], c[1], c[2]], 0)
+            pygame.draw.polygon(self.screen, self.spike_color, [c[0], c[1], c[2]], 0)
         for c in self.static_spike_arr:
-            self.pygame.draw.polygon(self.screen, self.spike_color, [c[0], c[1], c[2]], 0)
+            pygame.draw.polygon(self.screen, self.spike_color, [c[0], c[1], c[2]], 0)
 
     def gen_static_spike(self):
         width = self.screen_size[0]
@@ -119,13 +125,13 @@ class game:
         self.random_spike_color()
 
         max_val = (self.screen_size[1] / self.spike_width) - 3
-        r = randint(1, max_val)
+        r = randint(min((self.level / 2), max_val - 4), max_val)
         self.spike_arr = []
 
         while len(self.spike_arr) < r :
             b = randint(1, max_val) * self.spike_width
             while b in self.spike_arr:
-                b = randint(1, max_val) * self.spike_width
+                b = randint(1, max_val + 1) * self.spike_width
             self.spike_arr.append([(0,b),(self.spike_height, b + self.spike_width/2),(0,b + self.spike_width)])
             self.spike_arr.append([(w,b),(w - self.spike_height, b + self.spike_width/2),(w,b + self.spike_width)])
     

@@ -6,8 +6,8 @@ import time
 class main:
 
     pygame.init()
-    screen = pygame.display.set_mode((1000, 1000))
-    game = game.game(pygame, screen)
+    screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
+    game = game.game(screen, 1920, 1080)
 
 
 if __name__ == "__main__":

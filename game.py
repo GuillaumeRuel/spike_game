@@ -35,7 +35,7 @@ class game:
         self.start = time.time()
         self.font = pygame.font.SysFont('Comic Sans MS', 72)
         self.clock = pygame.time.Clock()
-        self.screen_size = [width, height]#pygame.display.get_surface().get_size()
+        self.screen_size = [width, height]
 
         self.spike_width = self.screen_size[0] / 20
         self.spike_height = self.screen_size[1] / 20
@@ -47,10 +47,10 @@ class game:
 
     def create_players(self):
         ship1 = pygame.image.load(game.PLAYER1_SPRITE).convert_alpha()
-        player1 = player.player((0,100), 5, ship1, "Player 1")
+        player1 = player.player((0, 100), 5, ship1, "Player 1")
 
         ship2 = pygame.image.load(game.PLAYER2_SPRITE).convert_alpha()
-        ship2 = pygame.transform.flip(ship2, True, False)
+        ship2 = pygame.transform.flip(ship2, True, False)  # flip image
         start2 = (self.screen_size[0] - player1.width, 100)
         player2 = player.player(start2, -5, ship2, "Player 2")
 

@@ -89,7 +89,7 @@ class game:
                 self.update_player(self.player1)
                 self.update_player(self.player2)
 
-            #check if the player 1 touch the edge
+            # check if players touch the edges (both touch at the same time)
             if self.player1.x < 0 or self.player1.x > self.screen_size[0] - self.player1.width:
                 d = threading.Thread(name='gen_spike', target=self.gen_spikes)
                 d.start()

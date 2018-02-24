@@ -1,3 +1,5 @@
+from pygame import transform
+
 class player:
 
     x = 0
@@ -37,5 +39,6 @@ class player:
     def update_x_position(self, max_width):
         if self.x < 0 or self.x > max_width - self.width:
             self.velx *= -1
+            self.image = transform.flip(self.image, True, False)
 
         self.x += self.velx

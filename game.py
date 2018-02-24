@@ -20,6 +20,8 @@ class game:
     spike_width = 0
     spike_height = 0
 
+    PLAYER_VELX = 8
+
     PLAYER1_SPRITE = "./sprites/spaceship1.png"
     PLAYER2_SPRITE = "./sprites/spaceship2.png"
 
@@ -47,12 +49,12 @@ class game:
 
     def create_players(self):
         ship1 = pygame.image.load(game.PLAYER1_SPRITE).convert_alpha()
-        player1 = player.player((0, 100), 5, ship1, "Player 1")
+        player1 = player.player((0, 100), game.PLAYER_VELX, ship1, "Player 1")
 
         ship2 = pygame.image.load(game.PLAYER2_SPRITE).convert_alpha()
         ship2 = pygame.transform.flip(ship2, True, False)  # flip image
         start2 = (self.screen_size[0] - player1.width, 100)
-        player2 = player.player(start2, -5, ship2, "Player 2")
+        player2 = player.player(start2, -game.PLAYER_VELX, ship2, "Player 2")
 
         return player1, player2
 

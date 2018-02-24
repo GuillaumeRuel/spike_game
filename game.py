@@ -20,12 +20,13 @@ class game:
     spike_width = 0
     spike_height = 0
 
+    PLAYER1_SPRITE = "./sprites/spaceship1.png"
+    PLAYER2_SPRITE = "./sprites/spaceship2.png"
+
     spike_arr = []
     static_spike_arr = []
     level = 1
 
-    player1 = ""
-    player2 = ""
     screen_size = (0, 0)
 
     def __init__(self, screen, width, height):
@@ -45,10 +46,10 @@ class game:
         self.launch()
 
     def create_players(self):
-        ship1 = pygame.image.load("./sprites/spaceship1.png").convert_alpha()
+        ship1 = pygame.image.load(game.PLAYER1_SPRITE).convert_alpha()
         player1 = player.player((0,100), 5, ship1, "Player 1")
 
-        ship2 = pygame.image.load("./sprites/spaceship2.png").convert_alpha()
+        ship2 = pygame.image.load(game.PLAYER2_SPRITE).convert_alpha()
         ship2 = pygame.transform.flip(ship2, True, False)
         start2 = (self.screen_size[0] - player1.width, 100)
         player2 = player.player(start2, -5, ship2, "Player 2")

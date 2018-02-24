@@ -1,6 +1,4 @@
 # spike_game
-#python 3
-
 
 # installation
 ```

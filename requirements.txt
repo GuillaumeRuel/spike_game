@@ -1,0 +1,2 @@
+pygame==1.9.3
+Shapely==1.6.4.post1

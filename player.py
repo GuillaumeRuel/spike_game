@@ -7,8 +7,8 @@ class player:
     vely = 0
     velx = 0
     name = ""
-    width = 60
-    height = 60
+    width = 105
+    height = 70
     jump_speed = -2000
     gravity = 9800
     is_alive = True
@@ -24,8 +24,12 @@ class player:
     def get_position(self):
         return self.x, self.y
 
+    #calculating the hitbox with some pixel perfect adjustement
     def get_polygon(self):
-        return [(self.x, self.y),(self.x, self.y + self.width),(self.x + self.height, self.y + self.height),(self.x + self.width, self.y)]
+        if self.velx > 0:
+            return [(self.x + 5, self.y - 5), (self.x + self.width + 5, self.y + (self.height/2)-5), (self.x + 5, self.y + self.height)]
+        else:
+            return [(self.x + self.width - 10, self.y - 5), (self.x - 15, self.y + (self.height/2)-5), (self.x + self.width - 10, self.y + self.height)]
 
     def jump(self):
         self.vely = self.jump_speed
